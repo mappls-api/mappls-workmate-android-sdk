@@ -4,23 +4,6 @@
 
 The Workmate Android SDK is designed to facilitate task management for field teams by providing a set of functionalities such as task creation, task updates, session management (start/end workday), and user authentication. This SDK leverages the SOLID principles to ensure high maintainability, scalability, and flexibility.
 
-#### **SOLID Principles in Workmate SDK Design**
-
-1. **Single Responsibility Principle (SRP)**  
-   Each class in the SDK is responsible for a single part of the functionality, ensuring that classes are cohesive and easy to maintain.
-
-2. **Open/Closed Principle (OCP)**  
-   The SDK classes are designed to be open for extension but closed for modification. This means new functionality can be added by extending existing classes without altering their core behavior.
-
-3. **Liskov Substitution Principle (LSP)**  
-   The SDK ensures that subclasses or derived classes can be used interchangeably with their base classes without affecting the correctness of the program.
-
-4. **Interface Segregation Principle (ISP)**  
-   Interfaces in the SDK are specific to what the clients need. Rather than having a single large interface, the SDK provides several smaller, more specific interfaces.
-
-5. **Dependency Inversion Principle (DIP)**  
-   High-level modules in the SDK do not depend on low-level modules but rather on abstractions. This means that the SDK is designed with flexibility and decoupling in mind, reducing the risk of changes propagating through the system.
-
 ---
 
 ### **SDK Class Structure**
