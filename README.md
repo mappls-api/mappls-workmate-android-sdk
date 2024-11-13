@@ -1,259 +1,742 @@
-# mappls-workmate-android-sdk
-Native Android SDK for our Workforce Management &amp; Automation Solution - Workmate
+# Workmate SDK Implementation
 
-[<img src="https://about.mappls.com/images/mappls-b-logo.svg" height="60"/> </p>](https://www.mapmyindia.com/api)
+This document outlines the implementation details for initializing the Workmate SDK, updating attendance, and check-in and check-out for the end user application.
 
-# WORKMATE SDK
+## Table of Contents
 
-**Easy To Integrate WORKMATE SDKs For Web & Mobile Applications**
+- [SDK Integration](#sdk-integration)
+- [Initialization](#initialization)
+- [Updating Attendance](#updating-attendance)
+- [Updating Attendance with Activity](#updating-attendance-with-activity)
+- [Updating Check-In and Check-Out](#updating-check-in-and-check-out)
+- [Get task List](#get-task-list)
+- [Hold or resume task](#hold-and-resume-task)
+- [Update Workitem Activity](#update-workitem-activity)
+- [Update Workitem Activity with lat and lng](#update-workitem-activity-with-lat-and-lng)
+- [Get device Location Details](#get-device-location-details)
 
-Powered by India's most comprehensive and robust task performing functionalities.
+## SDK Integration
 
-1. You can get your api key to be used in this document here: [https://apis.mappls.com/console/](https://apis.mappls.com/console/)
+### Setup your project
 
-2. The sample code is provided to help you understand the basic functionality of task methods working on **Web**, **Android** & **iOS** native development platform.
+###
 
-4. Explore through [200 + nations with Global Search](https://github.com/mappls-api/mappls-rest-apis/blob/main/docs/countryISO.md) with **Global Search, Routing and Mapping APIs & SDKs** by Mappls.
-
-## [Getting Started]()
-
-The `postEvent` function allows you to efficiently track and update the progress of tasks within your application. By using `postEvent`, you can record each step of a task, ensuring real-time updates and accurate tracking of task progress. This functionality is crucial for maintaining up-to-date task status and providing users with timely information about their tasks.
-
-Additionally, the `manageWorkDay` function facilitates the management of workday schedules. It enables you to mark the beginning and end of a workday, effectively tracking attendance and ensuring accurate records of work hours. This feature is essential for businesses looking to streamline attendance management and monitor employee work patterns. Together, these functions enhance task management and attendance tracking in your application, offering a comprehensive solution for workday and task progress management.
-
-
-## [Setup your project]()
-
-Follow these steps to add the SDK to your project –
-
--   Create a new project in Android Studio
-
-**For older Build versions (i.e, Before gradle  v7.0.0)**
--  Add Mappls repository in your project level `build.gradle`
-~~~groovy  
- allprojects {  
-    repositories {  
-  
-        maven {  
-            url 'https://maven.mappls.com/repository/mappls/'  
-        }  
-    }  
-}  
-~~~  
-**For Newer Build Versions (i.e, After gradle v7.0.0)**
-- Add Mappls repository in your `settings.gradle`
-```groovy  
-dependencyResolutionManagement {  
-//   repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)  
-  repositories {  
-        mavenCentral()  
-        maven {  
-            url 'https://maven.mappls.com/repository/mappls/'  
-        }  
-    }  
-   }  
-```
--   Add below dependency in your app-level `build.gradle`
+- Add below repository project level Gradle file below AGP 7.0.0
 
 ```groovy
-implementation 'com.mappls.sdk:mappls-workmate-sdk:1.0.0'
+ allprojects {
+    repositories {
+        maven {
+            url 'https://maven.mappls.com/repository/mappls/'
+        }
+        maven{
+            url 'https://maven.mappls.com/repository/mappls-workmate/'
+        }
+        flatDir {
+		  dirs 'libs'
+		}
+    }
+}
 ```
-- Add these permissions in your project
-```xml
-<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-```
-### [Add Java 8 Support to the project]()
 
-*add following lines in your app module's build.gradle*
+- Add below code in settings.gradle file above AGP 7.0.0
+
+```groovy
+dependencyResolutionManagement {
+
+  repositories {
+        mavenCentral()
+        maven {
+            url 'https://maven.mappls.com/repository/mappls/'
+        }
+        maven {
+            url 'https://maven.mappls.com/repository/mappls-workmate/'
+        }
+        flatDir {
+		  dirs 'libs'
+		}
+    }
+}
+```
+
+- If you are using Gradle.build.kts
+
+```groovy
+dependencyResolutionManagement {
+
+  repositories {
+        mavenCentral()
+		flatDir {
+		  dirs("libs")
+		}
+		maven {
+		  url = uri("https://maven.mappls.com/repository/mappls/")
+		}
+        maven{
+            url = uri("https://maven.mappls.com/repository/mappls-workmate/")
+        }
+    }
+}
+```
+
+- Add app level Gradle dependencies
+
+Create a folded in Android application
+
+    application/app/libs/<release-file-name.aar>
+
+```groovy
+  //Add workmate sdk
+  implementation(files("./libs/<release-file-name>.aar"))
+  //Required dependencies
+  implementation("com.squareup.retrofit2:retrofit:2.9.0")
+  implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+  implementation("com.squareup.okhttp3:logging-interceptor:4.11.0")
+  implementation("com.mappls.sdk:intouch-sdk:1.x.x")
+}
+
+```
+
+- Make sure java version 8 is added
 
 ```groovy
 compileOptions {
-    sourceCompatibility 1.8
-    targetCompatibility 1.8
+  sourceCompatibility = JavaVersion.VERSION_1_8
+  targetCompatibility = JavaVersion.VERSION_1_8
 }
+```
+
+## Initialization
+
+### Function: `initWorkmate`
+
+This function initializes the Workmate SDK with the required credentials and user information. It also handles authentication and provides callbacks for success and failure.
+
+#### Implementation
+
+Kotlin Implementation
+
+```groovy
+    Workmate.initialize(
+        activity, appID, clientId, clientSecret, username, userID, password, email,
+        authCallback = object : WMAuthListener {
+            override fun onAuthSuccess(response: AuthResponse) {
+                //Do something
+            }
+
+            override fun onAuthFailure(error: String) {
+                //Do something
+            }
+        }
+    )
+
+```
+
+Java Implementation
+
+```groovy
+    Workmate.initialize(
+        activity, appID, clientId, clientSecret, username, userID, password, email,
+        new WMAuthListener() {
+            @Override
+            public void onAuthSuccess(AuthResponse response) {
+                // Do something
+            }
+
+            @Override
+            public void onAuthFailure(String error) {
+                // Do something
+            }
+        }
+    );
+
+```
+
+### Refresh Token
+
+Use below method to refresh token when needed.
+
+### Function: `refreshToken`
+
+Kotlin Implementation
+
+```groovy
+    Workmate.refreshToken(activity, object : WMAuthListener {
+        override fun onAuthSuccess(response: AuthResponse) {
+            // Do something
+        }
+
+        override fun onAuthFailure(error: String) {
+            // Do something
+        }
+    })
+```
+
+Java Implementation
+
+```groovy
+    Workmate.refreshToken(activity, new WMAuthListener() {
+        @Override
+        public void onAuthSuccess(AuthResponse response) {
+            // Do something
+        }
+
+        @Override
+        public void onAuthFailure(String error) {
+            // Do something
+        }
+    });
+
+```
+
+### Explanation
+
+- **Parameters:**
+
+  - `activity`: Activity context (just pass this).
+  - `appID : <String>`, `clientId : <String>`, `clientSecret : <String>`, `email : <String>`, `password : <String>`, `username : <String>`, `userID : String>`: Credentials and user information required for SDK initialization.
+  - `authCallback`: A callback to handle authentication results, including success and failure.
+
+- **Callbacks:**
+
+  - `onAuthSuccess`: Handles successful authentication and stores the `accessToken`.
+  - `onAuthFailure`: Handles authentication failure and displays the error message.
+
+## Updating Attendance
+
+### Function: `updateAttendance`
+
+This function handles the process of updating attendance using the Workmate SDK.
+
+#### Implementation
+
+Kotlin implementation
+
+```groovy
+    Workmate.updateAttendance(
+        activity,
+        accessToken,
+        attendanceId (optional),
+        object : WMSessionListener {
+            override fun onSessionStarted(attendanceResponse: AttendanceResponse) {
+                //Do something
+                //attendanceResponse (id, message, status) here id is your attendance id.
+            }
+
+            override fun onSessionEnded(attendanceResponse: AttendanceResponse) {
+                //Do something
+            }
+
+            override fun onSessionError(sessionError: String) {
+                //Do smething
+            }
+        }
+    )
+
+```
+
+Java implementation
+
+```groovy
+    Workmate.updateAttendance(
+    activity,
+    accessToken,
+    @Nullable attendanceId, // Pass null if attendanceId is optional
+    new WMSessionListener() {
+        @Override
+        public void onSessionStarted(AttendanceResponse attendanceResponse) {
+            // Do something
+            // attendanceResponse (id, message, status) - here id is your attendance id.
+        }
+
+        @Override
+        public void onSessionEnded(AttendanceResponse attendanceResponse) {
+            // Do something
+        }
+
+        @Override
+        public void onSessionError(String sessionError) {
+            // Do something
+        }
+    }
+);
+
+```
+
+### Explanation
+
+- **Parameters:**
+
+  - Important update regarding attendance id
+
+  ```groovy
+  In above signatures attendnce id is optional. pass null to start session (Workday start) and pass attendance id to stop session (Workday End).
   ```
 
-### [Add your API keys to the SDK]()
-*Add your API keys to the SDK (in your application's onCreate() or before using map)*
+  - `activity`: Activity context (this)
+  - `accessToken : <String>`: The access token obtained from the authentication process.
+  - `attendanceId : <Int>`: The attendance id for workday end. (Required)
+  - `WMSessionListener`: A callback to handle the success or failure of the attendance update process.
 
-#### Java
-```java
-MapplsAccountManager.getInstance().setRestAPIKey("SET_REST_API_KEY");
-MapplsAccountManager.getInstance().setSDKKey("SET_MAP_KEY");
-MapplsAccountManager.getInstance().setClientId("SET_CLIENT_ID");
-MapplsAccountManager.getInstance().setClientSecret("SET_CLIENT_SECRET");
-Mappls.getInstance(getApplicationContext());
-```
+- **Callbacks:**
 
-#### Kotlin
-```kotlin
-MapplsAccountManager.getInstance().setRestAPIKey = "SET_REST_API_KEY"
-MapplsAccountManager.getInstance().setSDKKey = "SET_MAP_KEY"
-MapplsAccountManager.getInstance().setClientId = "SET_CLIENT_ID"
-MapplsAccountManager.getInstance().setClientSecret = "SET_CLIENT_SECRET"
-Mappls.getInstance(applicationContext)
-```
-*You cannot use the Mappls Workmate Mobile SDK without these function calls. You will find your keys in your API Dashboard.*
+  - `onSessionStarted`: Logs and displays the success message when the session starts.
+  - `onSessionEnded`: Logs and displays the success message when the session ends.
+  - `onSessionError`: Logs and displays an error message if there's an issue with the session.
 
+## Updating Attendance with Activity
 
-## [Add a Mappls Workmate SDK to your application]()
+### Function: `updateAttendance`
 
-## Initialize Workmate SDK
+This function is the overload method of updateAttendance. Added extra paramter called `activityId`.
+Rest uage and callback responses remains the same.
 
-Initialization can be done either of the below mentioned method. Keep the same method accross your project.
+#### Implementation
 
-Initialize the SDK with your Application Id, ClientID, ClientSecret, DeviceID ,DeviceFingerprint(optional).
+Kotlin implementation
 
-#### Java
+```groovy
+    Workmate.updateAttendance(
+        activity,
+        accessToken,
+        attendanceId (optional),
+        activityId,
+        object : WMSessionListener {
+            override fun onSessionStarted(attendanceResponse: AttendanceResponse) {
+                //Do something
+                //attendanceResponse (id, message, status) here id is your attendance id.
+            }
 
-```java
-// IAuthListener - returns authorization results in the forms of callbacks.
-Workmate.initialize(appId, clientId, clientSecret, deviceId, deviceFingerPrint, new IAuthListener() {
-	@Override
-	public void onSuccess(Long id) {
-			  //write your code here
-	}
-	@Override
-	public void onError(String reason, String identifier, String description) {
-	         // reason gives the error type.
-            // errorIdentifier gives information about error code.
-           // errorDescription gives a message for a particular error.
-	}
-});
+            override fun onSessionEnded(attendanceResponse: AttendanceResponse) {
+                //Do something
+            }
+
+            override fun onSessionError(sessionError: String) {
+                //Do smething
+            }
+        }
+    )
 
 ```
 
-#### Kotlin
+Java implementation
 
-```Kotlin
-Workmate.initialize(appId, clientId, clientSecret, deviceId, deviceFingerPrint, object : IAuthListener {
-    override fun onSuccess(Long entityId) {
-         //write your code here
+```groovy
+    Workmate.updateAttendance(
+    activity,
+    accessToken,
+    @Nullable attendanceId, // Pass null if attendanceId is optional
+    activityId,
+    new WMSessionListener() {
+        @Override
+        public void onSessionStarted(AttendanceResponse attendanceResponse) {
+            // Do something
+            // attendanceResponse (id, message, status) - here id is your attendance id.
+        }
+
+        @Override
+        public void onSessionEnded(AttendanceResponse attendanceResponse) {
+            // Do something
+        }
+
+        @Override
+        public void onSessionError(String sessionError) {
+            // Do something
+        }
     }
-	override fun onError(reason: String?, errorIdentifier: String?, errorDescription: String?) {
-       // reason gives the error type.
-      // errorIdentifier gives information about error code.
-      // errorDescription gives a message for a particular error.
-    }
+);
 
-})
 ```
 
-On sucessful initialization you will get the Id, use this Id to invoke methods to perform the man tasks or to get the live location.
+### Explanation
 
-### Workmate method to add task  
+- **Parameters:**
 
-This section describes how to use workmate for add task .
+  - Important update regarding attendance id
 
-#### Java
-~~~java
-Workmate.addtask(String accessID, String appId, String userId, JsonObject taskObject)
-~~~
+  ```groovy
+  In above signatures attendnce id is optional. pass null to start session (Workday start) and pass attendance id to stop session (Workday End).
+  ```
 
-#### Kotlin
-~~~kotlin
-Workmate.addtask(String accessID, String appId, String userId, JsonObject taskObject)
-~~~
+  - `activity`: Activity context (this)
+  - `accessToken : <String>`: The access token obtained from the authentication process.
+  - `attendanceId : <Int>`: The attendance id for workday end. (Required)
+  - `activityId: <Int>`: Pass activity id to access activity while start or end workday.
+  - `WMSessionListener`: A callback to handle the success or failure of the attendance update process.
 
-### Workmate method to fetch Task Stats 
+- **Callbacks:**
 
-This section describes how to use workmate for fetching task stats.
+  - `onSessionStarted`: Logs and displays the success message when the session starts.
+  - `onSessionEnded`: Logs and displays the success message when the session ends.
+  - `onSessionError`: Logs and displays an error message if there's an issue with the session.
 
-#### Java
-~~~java
-Workmate.getTaskStats(String accessID, String appId, String userId)
-~~~
+## Updating Check-In and Check-Out
 
-#### Kotlin
-~~~kotlin
-Workmate.getTaskStats(String accessID, String appId, String userId)
-~~~
+### Function: `updateCheckInOut`
 
-### Workmate method to Start and End Work Day
+This function handles the process of updating check-in and check-out information using the Workmate SDK.
 
-This section describes how to use workmate method for starting and ending a work day, which also be used for mark attendance.
+#### Implementation
 
-#### Java
-```java
-Workmate.manageWorkDay(String accessID, String appId, String userId, String workDayAction)
+Kotlin implementation
+
+```groovy
+    Workmate.updateCheckInAndOut(
+        activity, id, activityId, taskId, partnerId, accessToken,
+        checkInOutListener = object : WMCheckInOutListener {
+            override fun onCheckInAndOutSuccess(checkInAndOutResponse: CheckInAndOutResponse) {
+                //Do something
+            }
+
+            override fun onCheckInAndOutFailed(error: String) {
+                //Do smething
+            }
+        }
+    )
 ```
 
-#### Kotlin
-~~~kotlin
-Workmate.manageWorkDay(String accessID, String appId, String userId, String workDayAction)
-~~~
+Java implementation
 
-### Workmate method to Start and End task
+```groovy
 
-This section describes how to use workmate for starting and ending a task.
-#### Java
-```java
-Workmate.postEvent(String accessID, String appId, String userId, String taskId, String eventCode, String eventName, String remarks)
+    Workmate.updateCheckInAndOut(
+        activity, id, activityId, taskId, partnerId, accessToken,
+        new WMCheckInOutListener() {
+            @Override
+            public void onCheckInAndOutSuccess(CheckInAndOutResponse checkInAndOutResponse) {
+                // Do something
+            }
+
+            @Override
+            public void onCheckInAndOutFailed(String error) {
+                // Do something
+            }
+        }
+    );
+
 ```
 
-#### Kotlin
-~~~kotlin
-Workmate.postEvent(String accessID, String appId, String userId, String taskId, String eventCode, String eventName, String remarks)
-~~~
+### Explanation
 
-### Workmate method Responses
-~~~Response
-{
-  "message": "Success",
-  "status": 200
-}
-~~~
-~~~Response
-{
-  "message": "<message>",
-  "status": 202
-}
-~~~
-~~~Response
-{
-  "message": "Unauthorized. Invalid Access ID",
-  "status": 401
-}
-~~~
-~~~Response
-{
-  "message": "Unauthorized. Invalid Access ID (Expired)",
-  "status": 401
-}
-~~~
-~~~Response
-{
-  "message": "Expectation Failed",
-  "status": 417
-}
-~~~
+- **Parameters:**
 
-<br>
+  - `activity`: Activity context (this)
+  - `id : <Int>`: After cheakin. You'll get an id pass here for <id> parameter.
 
-For any queries and support, please contact: 
+  ```groovy
+  In above implementation id is the checkinOut id.
+  - While checkin pass null in id
+  - While checkout pass id value retrived from onCheckInAndOutSuccess method.
+  ```
 
-[<img src="https://about.mappls.com/images/mappls-logo.svg" height="40"/> </p>](https://about.mappls.com/api/)
-Email us at [apisupport@mappls.com](mailto:apisupport@mappls.com)
+  - `activityId: <Int>`: The activity id for workflows.
+  - `accessToken : <String>`: The access token obtained from the authentication process.
+  - `taskId : <String>`, `partnerId : <Int>`: Identifiers for the task and partner.
+  - `checkInOutListener`: A callback to handle the success or failure of the check-in and check-out process.
 
+- **Callbacks:**
 
-![](https://www.mapmyindia.com/api/img/icons/support.png)
-[Support](https://about.mappls.com/contact/)
-Need support? contact us!
+  - `onCheckInAndOutSuccess`: Displays a success message.
+  - `onCheckInAndOutFailed`: Displays an error message.
 
-<br></br>
-<br></br>
+## Get task List
 
-[<p align="center"> <img src="https://www.mapmyindia.com/api/img/icons/stack-overflow.png"/> ](https://stackoverflow.com/questions/tagged/mappls-api)[![](https://www.mapmyindia.com/api/img/icons/blog.png)](https://about.mappls.com/blog/)[![](https://www.mapmyindia.com/api/img/icons/gethub.png)](https://github.com/Mappls-api)[<img src="https://mmi-api-team.s3.ap-south-1.amazonaws.com/API-Team/npm-logo.one-third%5B1%5D.png" height="40"/> </p>](https://www.npmjs.com/org/mapmyindia) 
+### Function: `getTaskList`
 
+This function will give you the list of all the task.
 
+#### Implementation
 
-[<p align="center"> <img src="https://www.mapmyindia.com/june-newsletter/icon4.png"/> ](https://www.facebook.com/Mapplsofficial)[![](https://www.mapmyindia.com/june-newsletter/icon2.png)](https://twitter.com/mappls)[![](https://www.mapmyindia.com/newsletter/2017/aug/llinkedin.png)](https://www.linkedin.com/company/mappls/)[![](https://www.mapmyindia.com/june-newsletter/icon3.png)](https://www.youtube.com/channel/UCAWvWsh-dZLLeUU7_J9HiOA)
+Kotlin implementation
 
+```groovy
+    Workmate.getTaskList(activity, startTimeInEpoch, stopTimeInEpoch, accessToken,
+        object : WMTaskListListener {
+            override fun onTaskListSuccess(taskList: List<TaskData>) {
+                //do something
+            }
 
+            override fun onTaskListError(error: String) {
+                //do something
+            }
+    })
+```
 
+Java implementation
 
-<div align="center">@ Copyright 2024 CE Info Systems Ltd. All Rights Reserved.</div>
+```groovy
+Workmate.getTaskList(activity, startTimeInEpoch, stopTimeInEpoch, accessToken,
+    new WMTaskListListener() {
+        @Override
+        public void onTaskListSuccess(List<TaskData> taskList) {
+            // do something
+        }
 
-<div align="center"> <a href="https://about.mappls.com/api/terms-&-conditions">Terms & Conditions</a> | <a href="https://about.mappls.com/about/privacy-policy">Privacy Policy</a> | <a href="https://about.mappls.com/pdf/mapmyIndia-sustainability-policy-healt-labour-rules-supplir-sustainability.pdf">Supplier Sustainability Policy</a> | <a href="https://about.mappls.com/pdf/Health-Safety-Management.pdf">Health & Safety Policy</a> | <a href="https://about.mappls.com/pdf/Environment-Sustainability-Policy-CSR-Report.pdf">Environmental Policy & CSR Report</a>
+        @Override
+        public void onTaskListError(String error) {
+            // do something
+        }
+    });
+```
 
-<div align="center">Customer Care: +91-9999333223</div>
+### Help
+
+Get Epoch time from time stamp. Below code can help
+
+```groovy
+
+//Kotlin code
+    val timestamp = "2024-09-12 15:30:00" // Example timestamp
+    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+    val dateTime = LocalDateTime.parse(timestamp, formatter)
+    val epoch: Long = dateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
+
+//Java code
+    String timestamp = "2024-09-12 15:30:00"; // Example timestamp
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    LocalDateTime dateTime = LocalDateTime.parse(timestamp, formatter);
+    long epoch = dateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+
+```
+
+### Explenation
+
+- **Parameters:**
+
+  - `activity`: Activity context (this)
+  - `startTimeInEpoc : <Long>`: Sent start time in EPOCH.
+  - `stopTimeInEpoc : <Long>`: Sent stop time in EPOCH
+  - `accessToken: <String>`: Pass teh access token recieved from auth.
+  - `WMTaskListListener`: A callback to handle the success or failure of the task list call.
+
+- **Callbacks:**
+
+  - `onTaskListSuccess`: In success it will give list of all the task.
+  - `onTaskListError`: Displays an error message.
+
+## Hold and resume task
+
+### Function: `performTaskHoldResume`
+
+This function will hep to hold and resume the task that checked in.
+
+```groovy
+Hold or Resume operations can only be performed for the task that was checked in.
+```
+
+#### Implementation
+
+Kotlin implementation
+
+```groovy
+Workmate.performTaskHoldResume(activity, token, taskId, checkInId, type,
+    object : WMTaskHRListener {
+        override fun onTaskHoldResumeSuccess(response: TaskStatusResponse) {
+            // TODO("Not yet implemented")
+        }
+
+        override fun onTaskHoldResumeError(error: String) {
+            // TODO("Not yet implemented")
+        }
+
+    })
+```
+
+Java implementation
+
+```groovy
+Workmate.performTaskHoldResume(activity, token, taskId, checkInId, type,
+    new WMTaskHRListener() {
+        @Override
+        public void onTaskHoldResumeSuccess(TaskStatusResponse response) {
+            // TODO: Implement this method
+        }
+
+        @Override
+        public void onTaskHoldResumeError(String error) {
+            // TODO: Implement this method
+        }
+    });
+
+```
+
+### Explenation
+
+- **Parameters**
+
+  - `activity`: Just pass this
+  - `token <String>`: Pass access token hhere
+  - `taskid <String>`: Pass task id that needs to hold or resume
+  - `checkInId <Int>`: Pass ccheckId that was retrived after checkIn of that perticular task.
+  - `type`: Type is a already defined constant **WMTaskConstant.HOLD_TASK or WMTaskConstant.RESUME_TASK**
+
+- **Callbacks**
+
+  - `onTaskHoldResumeSuccess`: Will give the success response from server
+  - `onTaskHoldResumeError`: Will give error response, errors or any exception happens.
+
+## Update Workitem Activity
+
+### Function: `updateWorkItemActivity`
+
+This function will help you to update you workitem activity.
+
+#### Implementation
+
+Kotlin implementation
+
+```groovy
+    Workmate.updateWorkItemActivity(activity, accessToken, taskId, partnerId, activityId,
+        object : WMUpdateActivityListener {
+            override fun onActivityUpdateSuccess(updateActivity: UpdateActivity) {
+                // do something
+            }
+
+            override fun onActivityUpdateError(error: String?) {
+                // do something
+            }
+        }
+)
+```
+
+Java Implementation
+
+```groovy
+    Workmate.updateWorkItemActivity(activity, accessToken, taskId, partnerId, activityId,
+        new WMUpdateActivityListener() {
+            @Override
+            public void onActivityUpdateSuccess(UpdateActivity updateActivity) {
+                // do something
+            }
+
+            @Override
+            public void onActivityUpdateError(String error) {
+                // do something
+            }
+        });
+```
+
+### Explenation
+
+- **Parameters:**
+
+  - `activity`: Activity context (this)
+  - `activityId: <Int>`: The activity id for workflows.
+  - `accessToken : <String>`: The access token obtained from the authentication process.
+  - `taskId : <String>`, `partnerId : <Int>`: Identifiers for the task and partner.
+  - `WMUpdateActivityListener`: A callback to handle the success or failure of the UpdateWorkitemActivity.
+
+- **Callbacks:**
+
+  - `onActivityUpdateSuccess`: In success it will give you the updateactivity model can be used accordingly.
+  - `onActivityUpdateError`: Displays an error message.
+
+## Update Workitem Activity with lat and lng
+
+### Function: `updateWorkItemActivity`
+
+This function will help you to update you workitem activity. Actually a overload method for updateWorkItemActivity()
+
+#### Implementation
+
+Kotlin implementation
+
+```groovy
+    Workmate.updateWorkItemActivity(activity, accessToken, taskId, partnerId, activityId, lat, lng,
+        object : WMUpdateActivityListener {
+            override fun onActivityUpdateSuccess(updateActivity: UpdateActivity) {
+                // do something
+            }
+
+            override fun onActivityUpdateError(error: String?) {
+                // do something
+            }
+        }
+)
+```
+
+Java Implementation
+
+```groovy
+    Workmate.updateWorkItemActivity(activity, accessToken, taskId, partnerId, activityId, lat, lng,
+        new WMUpdateActivityListener() {
+            @Override
+            public void onActivityUpdateSuccess(UpdateActivity updateActivity) {
+                // do something
+            }
+
+            @Override
+            public void onActivityUpdateError(String error) {
+                // do something
+            }
+        });
+```
+
+### Explenation
+
+- **Parameters:**
+
+  - `activity`: Activity context (this)
+  - `activityId: <Int>`: The activity id for workflows.
+  - `accessToken : <String>`: The access token obtained from the authentication process.
+  - `taskId : <String>`, `partnerId : <Int>`: Identifiers for the task and partner.
+  - `lat, lng <Double>`: lat and lng in double values
+  - `WMUpdateActivityListener`: A callback to handle the success or failure of the UpdateWorkitemActivity.
+
+- **Callbacks:**
+
+  - `onActivityUpdateSuccess`: In success it will give you the updateactivity model can be used accordingly.
+  - `onActivityUpdateError`: Displays an error message.
+
+## Get Device Location Details
+
+### function: `getDeviceLocationData`
+
+This functions hepls you to find device location details. See the following:
+
+```groovy
+latitude, longitude, altitude, speed, bearing, locationProvider
+```
+
+#### Implementation
+
+Kotlin Implementation
+
+```groovy
+    Workmate.getDeviceLocationData(activity, object : WMDeviceLocationListener {
+        override fun onDeviceInfoSuccess(deviceLocationInfo: DeviceLocationInfo) {
+            // Do something
+        }
+
+        override fun onDeviceInfoError(error: String) {
+            // Do something
+        }
+    })
+```
+
+Java implementation
+
+```groovy
+    Workmate.getDeviceLocationData(activity, new WMDeviceLocationListener() {
+        @Override
+        public void onDeviceInfoSuccess(DeviceLocationInfo deviceLocationInfo) {
+            // Do something
+        }
+
+        @Override
+        public void onDeviceInfoError(String error) {
+            // Do something
+        }
+    });
+
+```
+
+### Explenation
+
+- **Parameters:**
+
+  - `activity`: Activity Context (this)
+
+- **Parameters:**
+  - `onDeviceInfoSuccess`: On device location success
+  - `onDeviceIntoError`: On device location error.
