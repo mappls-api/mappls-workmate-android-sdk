@@ -26,11 +26,8 @@ This document outlines the implementation details for initializing the Workmate 
 ```groovy
  allprojects {
     repositories {
-        maven {
-            url 'https://maven.mappls.com/repository/mappls/'
-        }
         maven{
-            url 'https://maven.mappls.com/repository/mappls-workmate/'
+            url 'https://maven.mappls.com/repository/workmate/'
         }
         flatDir {
 		  dirs 'libs'
@@ -47,10 +44,7 @@ dependencyResolutionManagement {
   repositories {
         mavenCentral()
         maven {
-            url 'https://maven.mappls.com/repository/mappls/'
-        }
-        maven {
-            url 'https://maven.mappls.com/repository/mappls-workmate/'
+            url 'https://maven.mappls.com/repository/workmate/'
         }
         flatDir {
 		  dirs 'libs'
@@ -69,11 +63,9 @@ dependencyResolutionManagement {
 		flatDir {
 		  dirs("libs")
 		}
-		maven {
-		  url = uri("https://maven.mappls.com/repository/mappls/")
-		}
+
         maven{
-            url = uri("https://maven.mappls.com/repository/mappls-workmate/")
+            url = uri("https://maven.mappls.com/repository/workmate/")
         }
     }
 }
