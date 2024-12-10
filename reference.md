@@ -885,7 +885,7 @@ Workmate.performTaskHoldResume(activity, token, taskId, checkInId, type,
 
 ```
 
-### Explenation
+### Explanation
 
 - **Parameters**
 
@@ -949,7 +949,7 @@ Workmate.performTaskHoldResume(activity, token, taskId, checkInId, type,
 
 ```
 
-### Explenation
+### Explanation
 
 - **Parameters**
 
@@ -1006,7 +1006,7 @@ Java Implementation
         });
 ```
 
-### Explenation
+### Explanation
 
 - **Parameters:**
 
@@ -1062,7 +1062,7 @@ Java Implementation
         });
 ```
 
-### Explenation
+### Explanation
 
 - **Parameters:**
 
@@ -1121,7 +1121,7 @@ Java implementation
 
 ```
 
-### Explenation
+### Explanation
 
 - **Parameters:**
 
