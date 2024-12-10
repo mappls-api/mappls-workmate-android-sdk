@@ -818,7 +818,7 @@ Get Epoch time from time stamp. Below code can help
 
 ```
 
-### Explenation
+### Explanation
 
 - **Parameters:**
 
