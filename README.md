@@ -88,7 +88,7 @@ Create a folded in Android application
   implementation("com.squareup.retrofit2:retrofit:2.9.0")
   implementation("com.squareup.retrofit2:converter-gson:2.9.0")
   implementation("com.squareup.okhttp3:logging-interceptor:4.11.0")
-  implementation("com.mappls.sdk:intouch-sdk:1.x.x")
+  implementation("com.mappls.sdk:intouch-sdk:1.4.2")
 }
 
 ```
