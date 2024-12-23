@@ -24,6 +24,9 @@ This document outlines the implementation details for initializing the Workmate 
  allprojects {
     repositories {
         maven{
+            url 'https://maven.mappls.com/repository/mappls/'
+        }
+        maven{
             url 'https://maven.mappls.com/repository/workmate/'
         }
         flatDir {
@@ -39,7 +42,10 @@ This document outlines the implementation details for initializing the Workmate 
 dependencyResolutionManagement {
 
   repositories {
-        mavenCentral()      
+        mavenCentral()
+        maven{
+            url 'https://maven.mappls.com/repository/mappls/'
+        }    
         maven {
             url 'https://maven.mappls.com/repository/workmate/'
         }
@@ -61,6 +67,9 @@ dependencyResolutionManagement {
 		  dirs("libs")
 		}
         maven{
+            url = uri("https://maven.mappls.com/repository/mappls/")
+        }
+        maven{
             url = uri("https://maven.mappls.com/repository/workmate/")
         }
     }
@@ -74,15 +83,7 @@ Create a folded in Android application
     application/app/libs/<release-file-name.aar>
 
 ```groovy
-  //Add workmate sdk
-  implementation(files("./libs/<release-file-name>.aar"))
-  //Required dependencies
-  implementation("com.squareup.retrofit2:retrofit:2.9.0")
-  implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-  implementation("com.squareup.okhttp3:logging-interceptor:4.11.0")
-  implementation("com.mappls.sdk:intouch-sdk:1.4.2")
-}
-
+implementation 'com.mappls.sdk:mappls-workmate:1.0.0'
 ```
 
 - Make sure java version 8 is added
