@@ -78,10 +78,6 @@ dependencyResolutionManagement {
 
 - Add app level Gradle dependencies
 
-Create a folded in Android application
-
-    application/app/libs/<release-file-name.aar>
-
 ```groovy
 implementation 'com.mappls.sdk:mappls-workmate:1.0.0'
 ```
