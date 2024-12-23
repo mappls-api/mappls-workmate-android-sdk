@@ -214,7 +214,7 @@ Kotlin implementation
     Workmate.manageWorkday(
         activity,
         @Nullable attendanceId,
-        activityId,(optional),
+        activityId (optional),
         formData,
         accessToken,
         object : WMSessionListener {
@@ -241,7 +241,7 @@ Java implementation
     Workmate.manageWorkday(
         activity,        
         @Nullable attendanceId, 
-        activityId,(optional),
+        activityId (optional),
         formData,
         accessToken,
         new WMSessionListener() {
