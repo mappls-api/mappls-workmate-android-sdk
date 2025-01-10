@@ -276,6 +276,78 @@ Java implementation
   - `onSessionError`: Logs and displays an error message if there's an issue with the session.
 
 
+
+## Client Check-In and Check-Out 
+
+### Function: `clientCheckInOut`
+
+This function handles the process of  client check-in and check-out information using the Workmate SDK.
+
+#### Implementation
+
+Kotlin implementation
+
+```groovy
+    Workmate.clientCheckInOut(
+        activity,clientId,activityId, formData,accessToken,
+        clientCheckInOutListener = object : WMClientCheckInOutListener {
+            override fun onClientCheckInOutSuccess(ClientCheckInOutResponse: clientCheckInOutResponse) {
+                //Do something
+            }
+
+            override fun onClientCheckInOutFailed(error: String) {
+                //Do something
+            }
+        }
+    )
+```
+
+Java implementation
+
+```groovy
+
+    Workmate.clientCheckInOut(
+        activity,clientId,activityId, formData,accessToken,
+        new WMClientCheckInOutListener() {
+            @Override
+            public void onClientCheckInOutSuccess(ClientCheckInOutResponse clientCheckInOutResponse) {
+                // Do something
+            }
+
+            @Override
+            public void onClientCheckInOutFailed(String error) {
+                // Do something
+            }
+        }
+    );
+
+```
+
+### Explanation
+
+- **Parameters:**
+
+  - `activity`: Activity context (this)
+  - `clientId : <Int>`: After client cheakin. You'll get an clientId pass here for <id> parameter.
+
+  ```groovy
+    In above implementation clientId is the checkinOut clientId.
+  - While checkin pass null in clientId
+  - While checkout pass clientId value retrived from onClientCheckInOutSuccess method.
+  ```
+
+  - `activityId: <Int>`: Provide the activity ID to access the activity while checkin and checkout the task.If the workflow is disabled, pass null.
+  - `accessToken : <String>`: The access token obtained from the authentication process.
+  - `clientId : <String>`: This parameter represents the unique identifier for a client. The clientId is associated with the corresponding Workmate client.
+  - `formData: <JSONObject>`: The form data required when checking in or checking out of a client. If the workflow is enabled, provide the formData that corresponds to the specified activityId. This object typically contains key-value pairs representing the data fields associated with the client . If the workflow is disabled, pass null. 
+  - `clientCheckInOutListener`: A callback to handle the success or failure of the check-in and check-out process.
+
+- **Callbacks:**
+
+  - `onClientCheckInOutSuccess`: Displays a success message.
+  - `onClientCheckInOutFailed`: Displays an error message.
+
+
 ## Calculate distance in km
 
 ### Function: `calculateDistance`
