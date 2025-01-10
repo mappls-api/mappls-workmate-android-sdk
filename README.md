@@ -7,6 +7,7 @@ This document outlines the implementation details for initializing the Workmate 
 - [SDK Integration](#sdk-integration)
 - [Initialization](#initialization)
 - [Manage Workday](#manage-workday)
+- [Client Check-In and Check-Out](#client-check-in-and-check-out)
 - [Calculate Distance in km](#calculate-distance-in-km)
 - [Users Movement Trails](#users-movement-trails)
 - [Get User Activity](#get-user-activity)
