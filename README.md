@@ -1,4 +1,4 @@
-# Workmate SDK implementation
+# Workmate SDK - Android
 
 This document will help you implement Workmate fleet management SDK in your application. Workmate SDK provides lots of methods that can be integrated inside your application. Here is step by step approach how to get started with Workmate SDK.
 
@@ -10,6 +10,14 @@ This document will help you implement Workmate fleet management SDK in your appl
 > Starting from this version, password-based initialization has been removed from the SDK.
 > 
 > Please update your codebase to remove the password parameter and migrate to the new initialization mechanism before upgrading.
+
+## [Version History](#Version-History)
+
+| Version | Dated | Description |
+| :---- | :---- | :---- |
+| `1.0.3`| 27 Feb 2026 | Task Check-In/Check-Out, Enhanced task and client management APIs, Structured error handling, And optimized route planning for improved operational efficiency. |
+| `1.0.2`| -- | --|
+
 
 ## Table of content
 
