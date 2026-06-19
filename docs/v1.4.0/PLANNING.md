@@ -13,7 +13,6 @@ This document covers the two SDK methods that define the structure of that day. 
 ## [Table of Contents]()
 
 - [Manage Workday](#manage-workday)
-- [Route Optimization](#route-optimization)
 
 ---
 
@@ -186,98 +185,6 @@ Workmate.manageWorkday(
         @Override
         public void onSessionError(ErrorResponse sessionError) {
             Log.d("Workday Error", String.valueOf(sessionError));
-        }
-    }
-);
-```
-
----
-
-## [Route Optimization]()
-
-### Method: `getRouteOptimize`
-
-Calculates the most efficient route by optimizing the order of a user's assigned stops or waypoints. Factors in distance and travel time to improve routing performance for delivery, field visits, and logistics.
-
-Field agents often have multiple stops assigned per day — client visits, task locations, service sites. Without optimization, agents might follow a suboptimal order that wastes time and fuel. This method reorders those stops into the most efficient sequence automatically. User-assigned plans linked to locations are automatically reordered using this optimization when a workday begins, so agents start each day with the smartest possible route already in place.
-
-### Parameters
-
-| Parameter | Type | Description |
-|---|---|---|
-| `context` | `Context` | Android context. Pass `this`. |
-| `token` | `String` | Access token from `initialize`. |
-
-### Callbacks
-
-| Callback | Description |
-|---|---|
-| `onRouteOptimizeSuccess(PlanResponse)` | Returns the optimized route and plan details. |
-| `onRouteOptimizeFailure(ErrorResponse)` | Returns error code and message on failure. |
-
-### Kotlin
-
-```kotlin
-// Method signature
-Workmate.getRouteOptimize(
-    context,
-    token,
-    wmRouteListener = object : WMRouteListener {
-        override fun onRouteOptimizeSuccess(planResponse: PlanResponse) {
-            // Do something
-        }
-        override fun onRouteOptimizeFailure(errorResponse: ErrorResponse) {
-            // Do something
-        }
-    }
-)
-
-// Example
-Workmate.getRouteOptimize(
-    this,
-    token,
-    wmRouteListener = object : WMRouteListener {
-        override fun onRouteOptimizeSuccess(planResponse: PlanResponse) {
-            Log.d("Route", String.valueOf(planResponse))
-        }
-        override fun onRouteOptimizeFailure(errorResponse: ErrorResponse) {
-            Log.d("Route Error", String.valueOf(errorResponse))
-        }
-    }
-)
-```
-
-### Java
-
-```java
-// Method signature
-Workmate.getRouteOptimize(
-    context,
-    token,
-    new WMRouteListener() {
-        @Override
-        public void onRouteOptimizeSuccess(PlanResponse planResponse) {
-            // Do something
-        }
-        @Override
-        public void onRouteOptimizeFailure(ErrorResponse errorResponse) {
-            // Do something
-        }
-    }
-);
-
-// Example
-Workmate.getRouteOptimize(
-    this,
-    token,
-    new WMRouteListener() {
-        @Override
-        public void onRouteOptimizeSuccess(PlanResponse planResponse) {
-            Log.d("Route", String.valueOf(planResponse));
-        }
-        @Override
-        public void onRouteOptimizeFailure(ErrorResponse errorResponse) {
-            Log.d("Route Error", String.valueOf(errorResponse));
         }
     }
 );

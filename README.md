@@ -36,7 +36,6 @@ Workmate SDK is built for organisations that operate a distributed field workfor
 
 ### Attendance & Workday
 - [Manage Workday](docs/v1.4.0/PLANNING.md#manage-workday)
-- [Route Optimization](docs/v1.4.0/PLANNING.md#route-optimization)
 
 ### Clients
 - [Client Check-In](docs/v1.4.0/CLIENTS.md#client-check-in)
