@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="color_btn_back">#e1e2e3</color>
+    <color name="color_btn_back_dark">#0861bb</color>
+    <color name="card_back">#80000000</color>
+    <color name="widget_icon_color">#2B2B2B</color>
+    <color name="widget_icon_color_light">#7F7F7F</color>
+    <color name="card_back_light">#E1E2E3</color>
+    <color name="transparent">#00000000</color>
+
+    <color name="selected_background">#FFDDDD</color>
+</resources>

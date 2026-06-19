@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    card_view:cardCornerRadius="12dp"
+    card_view:cardElevation="6dp"
+    android:layout_margin="8dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="12dp">
+
+        <TextView
+            android:id="@+id/tv_client_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Client Name"
+            android:textStyle="bold"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/tv_client_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Client Id"
+            android:textStyle="bold"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tv_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Address: Delhi, India" />
+
+        <TextView
+            android:id="@+id/tv_user_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="User Id: 872397" />
+
+        <TextView
+            android:id="@+id/tv_contact_person"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Contact Person: John doe" />
+
+        <TextView
+            android:id="@+id/tv_creation_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Creation Date: 2025-05-06" />
+
+        <TextView
+            android:id="@+id/tv_email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Email: example@gmail.com" />
+
+        <TextView
+            android:id="@+id/tv_lat_lng"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Latlng: 27.009632, 77.02887"
+            android:ellipsize="end" />
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

@@ -1,0 +1,48 @@
+<resources>
+    <string name="app_name">WorkmateClient</string>
+    <string name="workmate">Workmate</string>
+    <string name="client">Client</string>
+    <string name="login">Login</string>
+    <string name="password">Password</string>
+    <string name="workmate_client_application">Workmate client application</string>
+    <string name="actions">Actions</string>
+    <string name="attendance_status">Attendance status</string>
+    <string name="user_id">User ID</string>
+    <string name="user_email">User email</string>
+    <string name="starting_workday">Starting Workday</string>
+    <string name="workday_already_started">Workday Already started.</string>
+    <string name="workday_started_successfully">Workday started successfully.</string>
+    <string name="error_please_try_again_later">Error. Please try again later</string>
+    <string name="stopping_workday">Stopping workday</string>
+    <string name="client_id">Client ID</string>
+    <string name="task_id">Task ID</string>
+    <string name="check_in_out_id"> Check in out id</string>
+    <string name="client_secret">Client Secret</string>
+    <string name="end_datetime">End Datetime</string>
+    <string name="start_datetime">Start Datetime</string>
+    <string name="my_profile">My Profile</string>
+    <string name="profile_page">Profile Page</string>
+    <string name="update_config">Update Config</string>
+    <string name="user_configuration">User configuration</string>
+    <string name="total_distance_traveled">Total Distance Traveled</string>
+    <string name="distance">Distance</string>
+    <string name="updating_attendance">Updating attendance</string>
+    <string name="activity_data_will_visible_here">Activity data will visible here</string>
+    <string name="workmate_operations">Workmate operations</string>
+    <string name="available_operations">Available operations</string>
+    <string name="content">Content</string>
+    <string name="top">Top</string>
+    <string name="bottom">Bottom</string>
+    <string name="welcome">Welcome</string>
+    <string name="client_check_in_out">Client Check-in-out</string>
+    <string name="client_check_in">Client check in</string>
+    <string name="task_check_in">Task Check in</string>
+    <string name="task_check_out">Task check out</string>
+    <string name="client_id_error_string">Cannot perform client check out. Id is required.</string>
+    <string name="task_id_error_string">Cannot perform task check out. Id is required. </string>
+    <string name="task_id_error">Cannot perform task check out.Task Id is required. </string>
+    <string name="client_id_error">Cannot perform task check out.Client Id is required. </string>
+    <string name="task_check_in_out">Task Check-in-out</string>
+
+
+</resources>

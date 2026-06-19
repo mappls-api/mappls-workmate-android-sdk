@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".ui.device.DeviceDetails">
+
+        <androidx.appcompat.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/color_btn_back_dark"
+            android:elevation="5dp"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:title="Device Details" />
+
+        <ProgressBar
+            android:id="@+id/progress"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:indeterminate="true" />
+
+        <TextView
+            android:id="@+id/lat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@color/color_btn_back"
+            android:drawableStart="@drawable/baseline_location_pin_24"
+            android:drawablePadding="10dp"
+            android:drawableTint="@color/color_btn_back_dark"
+            android:gravity="center_vertical"
+            android:padding="10dp"
+            android:text="latitude" />
+
+        <TextView
+            android:id="@+id/lng"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@color/color_btn_back"
+            android:drawableStart="@drawable/baseline_location_pin_24"
+            android:drawablePadding="10dp"
+            android:drawableTint="@color/color_btn_back_dark"
+            android:gravity="center_vertical"
+            android:padding="10dp"
+            android:text="longitude" />
+
+        <TextView
+            android:id="@+id/speed"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@color/color_btn_back"
+            android:drawableStart="@drawable/baseline_speed_24"
+            android:drawablePadding="10dp"
+            android:drawableTint="@color/color_btn_back_dark"
+            android:gravity="center_vertical"
+            android:padding="10dp"
+            android:text="Speed" />
+
+        <TextView
+            android:id="@+id/altitude"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@color/color_btn_back"
+            android:drawableStart="@drawable/baseline_alt_24"
+            android:drawablePadding="10dp"
+            android:drawableTint="@color/color_btn_back_dark"
+            android:gravity="center_vertical"
+            android:padding="10dp"
+            android:text="Altitude" />
+
+        <TextView
+            android:id="@+id/bearing"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@color/color_btn_back"
+            android:drawableStart="@drawable/baseline_alt_24"
+            android:drawablePadding="10dp"
+            android:drawableTint="@color/color_btn_back_dark"
+            android:gravity="center_vertical"
+            android:padding="10dp"
+            android:text="Bearing" />
+
+        <TextView
+            android:id="@+id/type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@color/color_btn_back"
+            android:drawableStart="@drawable/baseline_gps_fixed_24"
+            android:drawablePadding="10dp"
+            android:drawableTint="@color/color_btn_back_dark"
+            android:gravity="center_vertical"
+            android:padding="10dp"
+            android:text="Type" />
+
+        <Button
+            android:id="@+id/get_data"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="Get device data again" />
+
+    </LinearLayout>
+</layout>
