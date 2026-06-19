@@ -65,7 +65,7 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 
     //Add workmate sdk
-    implementation("com.mappls.sdk:mappls-workmate:1.3.0")
+    implementation("com.mappls.sdk:mappls-workmate:1.4.0")
     //Required dependencies
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
